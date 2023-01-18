@@ -1,0 +1,22 @@
+# From: https://github.com/selikapro/microservices-python/blob/main/src/auth/manifests/configmap.yaml
+# Use "ConfigMap" for non-sensitive variables (that are not "secrets")
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-configmap
+data:
+# Config for "mysql" installed in WLS:
+# NOT WORKING: Connect to the "mysql" WSL service:
+#  MYSQL_HOST: host.minikube.internal
+#  MYSQL_USER: auth_user
+#  MYSQL_DB: auth
+#  MYSQL_PORT: '3306'
+#
+# Config for "mysql" running as POD in Kubernetes
+#   From: https://github.com/selikapro/microservices-python/issues/16#issuecomment-1334867612 
+  MYSQL_HOST: mysql
+#  MYSQL_HOST: mysql.default.svc.cluster.local
+#  MYSQL_HOST: 10.101.152.38
+  MYSQL_USER: auth_user
+  MYSQL_DB: auth
+  MYSQL_PORT: "3306"

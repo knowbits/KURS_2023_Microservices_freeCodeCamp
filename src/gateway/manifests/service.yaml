@@ -1,0 +1,14 @@
+# From: https://github.com/selikapro/microservices-python/blob/main/src/gateway/manifests/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  selector:
+    app: gateway
+  # ClusterIP: => The IP address assigned to the service is only available within our cluster:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP

@@ -1,0 +1,13 @@
+# https://github.com/selikapro/microservices-python/blob/main/src/rabbit/manifests/pvc.yaml
+# Persistent Volume Claim: PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard

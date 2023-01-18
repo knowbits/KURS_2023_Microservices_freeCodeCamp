@@ -1,0 +1,45 @@
+# https://github.com/selikapro/microservices-python/blob/main/src/rabbit/manifests/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+spec:
+  serviceName: "not-applicable"
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          # Official "rabbitmq" image:
+          # NOTE: The "management" version: Gives a GUI to manage queues etc
+          image: rabbitmq:3-management
+          ports:
+            # Port for GUI:
+            - name: http
+              protocol: TCP
+              containerPort: 15672
+            # Port for messaging:
+            # "amqp": "Advanced Message Queuing Protocol":
+            - name: amqp
+              protocol: TCP
+              containerPort: 5672
+          envFrom:
+            - configMapRef:
+                name: rabbitmq-configmap
+            - secretRef:
+                name: rabbitmq-secret
+          volumeMounts:
+            # Where in the container's file system we mount the "storage volume":
+            # Anything saved into this folder => Will be persisted to the physical sotrage.
+            # => THe RabbitMQ queues are stored hare => They are therefore DURABLE.
+            - mountPath: "/var/lib/rabbitmq"
+              name: rabbitmq-volume
+      volumes:
+        - name: rabbitmq-volume
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc

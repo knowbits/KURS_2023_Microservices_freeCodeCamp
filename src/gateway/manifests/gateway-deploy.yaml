@@ -1,0 +1,34 @@
+# From: https://github.com/selikapro/microservices-python/blob/main/src/gateway/manifests/gateway-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  # replicas: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # maxSurge: 3
+      maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          # image: sweasytech/gateway
+          image: gateway
+          # Added by EB: to pull Docker images from localhost:
+          imagePullPolicy: Never
+          envFrom:
+            - configMapRef:
+                name: gateway-configmap
+            - secretRef:
+                name: gateway-secret

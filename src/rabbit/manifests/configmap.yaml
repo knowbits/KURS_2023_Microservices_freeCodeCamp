@@ -1,0 +1,7 @@
+# https://github.com/selikapro/microservices-python/blob/main/src/rabbit/manifests/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-configmap
+data:
+  PLACEHOLDER: "NONE"

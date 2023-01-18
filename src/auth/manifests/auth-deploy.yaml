@@ -1,0 +1,44 @@
+# From: https://github.com/selikapro/microservices-python/blob/main/src/auth/manifests/auth-deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: auth
+spec:
+  # ORIGINAL: replicas: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # ORIGINAL: maxSurge: 3
+      maxSurge: 2
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          # image: sweasytech/auth
+          image: auth
+          # Added by EB: to pull Docker images from localhost:
+          imagePullPolicy: Never
+          # Added by EB: "resources" section:
+          #          resources:
+          #            limits:
+          #              memory: 512Mi
+          #              cpu: "1"
+          #            requests:
+          #              memory: 128Mi
+          #              cpu: "0.5"
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+            - secretRef:
+                name: auth-secret
